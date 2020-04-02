@@ -18,7 +18,7 @@ export default class userCrud extends Component {
 
     state = { ...initialState }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         axios(baseUrl).then(resp => {
             this.setState({ list: resp.data })
         })
