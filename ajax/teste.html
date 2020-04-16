@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='UTF-8'>
+    <title>XMLHttpRequest #01</title>
+    <link rel='stylesheet' href='css/estilo.css'>
+    <script src="js/axios.js"></script>
+    <script src="js/jquery.js"></script>
+</head>
+
+<body class="conteudo exercicio">
+    <h1>Estados</h1>
+
+    <script>
+        function ajax(config) {
+            const xhr = new XMLHttpRequest()
+            xhr.open(config.method, config.url, true)
+
+            xhr.onreadystatechange = e => {
+                if (e.target.readyState === 4) {
+                    xhr.status === 200 && config.success(xhr.response) ||
+                        xhr.status >= 400 && config.error({
+                            code: xhr.status,
+                            text: xhr.statusText
+                        })
+                }
+            }
+            xhr.send()
+        }
+
+        function createTable(states) {
+            const lines = states.map(state => {
+                const id = document.createElement('td')
+                id.innerHTML = state.id
+
+                const nome = document.createElement('td')
+                nome.innerHTML = state.nome
+
+                const sigla = document.createElement('td')
+                sigla.innerHTML = state.sigla
+
+                const tr = document.createElement('tr')
+                tr.appendChild(id)
+                tr.appendChild(nome)
+                tr.appendChild(sigla)
+                return tr
+            })
+
+            const table = document.createElement('table')
+            lines.forEach(line => table.appendChild(line))
+
+            document.body.appendChild(table)
+        }
+
+        ajax({
+            method: 'get',
+            url: 'dados/estados.json',
+            success(response) {
+                const states = JSON.parse(response)
+                createTable(states)
+            },
+            error(err) {
+                const msg = document.createTextNode(`${err.code}: ${err.text}`)
+                document.body.appendChild(msg)
+            }
+        })
+
+        // fetch('dados/estados2.json')
+        //     .then(resp => resp.json())
+        //     .then(obj => createTable(obj))
+        //     .catch(error => document.body.append(error))
+
+        // axios('dados/estados.json')
+        //     .then(resp => createTable(resp.data))
+        //     .catch(error => document.body.append(error))
+    </script>
+</body>

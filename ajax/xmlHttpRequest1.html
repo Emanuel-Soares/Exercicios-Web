@@ -58,7 +58,6 @@
             sucesso(resposta) {
                 const estados = JSON.parse(resposta)
                 criarTabela(estados)
-
             }, erro(e) {
                 const msg = document.createTextNode(`${e.codigo}: ${e.texto}`)
                 document.body.appendChild(msg)
